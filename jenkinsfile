@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Check Jira'){
             when {
-                expression {params.ENVIRONMENT == 'prod'}
+                expression {params.ENVIRONMENT == 'dev'}
             }
             steps{
                 script{
