@@ -10,6 +10,7 @@ pipeline {
     parameters{
          choice(name: 'ENVIRONMENT', choices: ['dev', 'qa', 'uat', 'pre-prod', 'prod'], description: 'Select your Environment')
          string(name: 'version', description: 'Enter your application version')
+         string(name: 'jira-id', description: 'Enter your jira id')
     }
     environment {
         appVersion = '' // this will become global, we can use across pipeline
@@ -30,11 +31,37 @@ pipeline {
                 }
             }
         }
+        stage('Integration tests'){
+            when {
+                expression {params.ENVIRONMENT == 'qa'}
+            }
+            steps{
+                script{
+                    sh """
+                        echo "Run integration tests"
+                        echo "Check jira deployment window"
+                        echo "Fail pipeline above two are not true"
+                    """
+                }
+            }
+        }
+        stage('Check Jira'){
+            when {
+                expression {params.ENVIRONMENT == 'prod'}
+            }
+            steps{
+                script{
+                    sh """
+                        echo "Check zera status"
+                    """
+                }
+            }
+        }
         stage('Depoly') {                 
             steps{
                 withAWS(region: 'us-east-1', credentials: 'aws-creds') {
                     sh """
-                        aws eks update-kubeconfig --region ${region} --name ${project}-${environment}
+                        aws eks update-kubeconfig --region ${region} --name ${project}-prod
                         cd helm
                         sed -i 's/IMAGE_VERSION/${appVersion}/g' values-${environment}.yaml
                         helm upgrade --install ${component} -n ${project} -f values-${environment}.yaml .
