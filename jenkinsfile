@@ -8,7 +8,7 @@ pipeline {
         //retry(1)
     }
     parameters{
-         choice(name: 'ENVIRONMENT', choices: ['DEV', 'QA', 'UAT', 'PRE-PROD', 'PROD'], description: 'Select your environment')
+         choice(name: 'ENVIRONMENT', choices: ['dev', 'qa', 'uat', 'pre-prod', 'prod'], description: 'Select your environment')
          string(name: 'version', description: 'Enter your application version')
     }
     environment {
