@@ -22,12 +22,12 @@ pipeline {
     
     stages {
         stage('Setup Environment'){
-             steps{
-                  script{
-                      environment = params.ENVIRONMENT
-                      appVersion = params.version
-                  }
-             }     
+            steps{
+                script{
+                    environment = params.ENVIRONMENT
+                    appVersion = params.version
+                }
+            }
         }
         stage('Depoly') {                 
             steps{
